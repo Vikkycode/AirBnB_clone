@@ -15,14 +15,14 @@ from models.review import Review
 
 def parse(arg):
     curly_braces = re.search(r"\{(.*?)\}", arg)
-    square_brackets = re.search(r"\[(.*?)\]", arg)
+    brackets = re.search(r"\[(.*?)\]", arg)
     if curly_braces is None:
-        if square_brackets is None:
+        if brackets is None:
             return [i.strip(",") for i in split(arg)]
         else:
-            lexer = split(arg[:square_brackets.span()[0]])
+            lexer = split(arg[:brackets.span()[0]])
             retl = [i.strip(",") for i in lexer]
-            retl.append(square_brackets.group())
+            retl.append(brackets.group())
             return retl
     else:
         lexer = split(arg[:curly_braces.span()[0]])
@@ -33,7 +33,6 @@ def parse(arg):
 
 class HBNBCommand(cmd.Cmd):
     """Defines the HolbertonBnB command interpreter.
-
     Attributes:
         prompt (str): The command prompt.
     """
@@ -83,18 +82,39 @@ class HBNBCommand(cmd.Cmd):
         print("")
         return True
 
-    def do_create(self, arg):
-        """Usage: create <class>
-        Create a new class instance and print its id.
+    def do_create(self, line):
+        """Usage: create <class> <key 1>=<value 2> <key 2>=<value 2> ...
+        Create a new class instance with given keys/values and print its id.
         """
-        argl = parse(arg)
-        if len(argl) == 0:
+        try:
+            if not line:
+                raise SyntaxError()
+            my_list = line.split(" ")
+
+            kwargs = {}
+            for i in range(1, len(my_list)):
+                key, value = tuple(my_list[i].split("="))
+                if value[0] == '"':
+                    value = value.strip('"').replace("_", " ")
+                else:
+                    try:
+                        value = eval(value)
+                    except (SyntaxError, NameError):
+                        continue
+                kwargs[key] = value
+
+            if kwargs == {}:
+                obj = eval(my_list[0])()
+            else:
+                obj = eval(my_list[0])(**kwargs)
+                storage.new(obj)
+            print(obj.id)
+            obj.save()
+
+        except SyntaxError:
             print("** class name missing **")
-        elif argl[0] not in HBNBCommand.__classes:
+        except NameError:
             print("** class doesn't exist **")
-        else:
-            print(eval(argl[0])().id)
-            storage.save()
 
     def do_show(self, arg):
         """Usage: show <class> <id> or <class>.show(<id>)
