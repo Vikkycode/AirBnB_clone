@@ -15,14 +15,14 @@ from models.review import Review
 
 def parse(arg):
     curly_braces = re.search(r"\{(.*?)\}", arg)
-    brackets = re.search(r"\[(.*?)\]", arg)
+    square_brackets = re.search(r"\[(.*?)\]", arg)
     if curly_braces is None:
-        if brackets is None:
+        if square_brackets is None:
             return [i.strip(",") for i in split(arg)]
         else:
-            lexer = split(arg[:brackets.span()[0]])
+            lexer = split(arg[:square_brackets.span()[0]])
             retl = [i.strip(",") for i in lexer]
-            retl.append(brackets.group())
+            retl.append(square_brackets.group())
             return retl
     else:
         lexer = split(arg[:curly_braces.span()[0]])
