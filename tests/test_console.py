@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 """Defines unittests for console.py.
-
 Unittest classes:
     TestHBNBCommand_prompting
     TestHBNBCommand_help
@@ -43,7 +42,7 @@ class TestHBNBCommand_help(unittest.TestCase):
             self.assertEqual(h, output.getvalue().strip())
 
     def test_help_create(self):
-        h = ("Usage: create <class> <key 1>=<value 1> <key 2>=<value 2>"
+        h = ("Usage: create <class>\n        "
              "Create a new class instance and print its id.")
         with patch("sys.stdout", new=StringIO()) as output:
             self.assertFalse(HBNBCommand().onecmd("help create"))
