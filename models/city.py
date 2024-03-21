@@ -8,6 +8,8 @@ from sqlalchemy import String
 from sqlalchemy.orm import relationship
 
 
+from models.place import Place
+
 class City(BaseModel, Base):
     """Represents a city for a MySQL database.
 

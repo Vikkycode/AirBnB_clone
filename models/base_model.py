@@ -63,7 +63,7 @@ class BaseModel:
         """Delete the current instance from storage."""
         models.storage.delete(self)
 
-     def __str__(self):
+    def __str__(self):
         """Return the print/str representation of the BaseModel instance."""
         d = self.__dict__.copy()
         d.pop("_sa_instance_state", None)
