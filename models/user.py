@@ -22,6 +22,19 @@ class User(BaseModel):
     first_name = ""
     last_name = ""
 
+    """Represents a user in Mysql database.
+    Inherits from sqlalchemy Base and links to the Mysql table  users.
+
+    Arttributes:
+        __tablesname__ (str): the name of the mysqltable to store users.
+        email: (sqlalchemy String): user's email address.
+        password (sqlalchemy String): user's password.
+        first_name (sqlalchemy String): users' first name.
+        last_name (sqlalchemy String): user's last_name.
+        places(sqlalchemy relationship): user place relationship.
+        reviews (sqlalchemy relationship): user reciew relationship
+    """
+
 
     __tablename__ = "users"
     email = Column(String(128), nullable=False)
